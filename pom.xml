@@ -9,6 +9,7 @@
     <version>1.0</version>
     <modules>
         <module>netty-websocket-springboot-starter</module>
+        <module>GameFrame</module>
     </modules>
     <packaging>pom</packaging>
 

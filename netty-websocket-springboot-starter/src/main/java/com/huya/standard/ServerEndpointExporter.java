@@ -1,21 +1,21 @@
 package com.huya.standard;
 
+import com.huya.annotation.ServerEndpoint;
 import com.huya.exception.DeploymentException;
+import com.huya.pojo.PojoEndpointServer;
+import com.huya.pojo.PojoMethodMapping;
 import org.springframework.beans.TypeConverter;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.SmartInitializingSingleton;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanExpressionContext;
 import org.springframework.beans.factory.config.BeanExpressionResolver;
 import org.springframework.beans.factory.support.AbstractBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.core.annotation.AnnotatedElementUtils;
-import com.huya.annotation.ServerEndpoint;
-import com.huya.pojo.PojoEndpointServer;
-import com.huya.pojo.PojoMethodMapping;
+import org.springframework.util.ClassUtils;
 
 import javax.net.ssl.SSLException;
 import java.net.InetSocketAddress;
@@ -27,16 +27,9 @@ import java.util.*;
  */
 public class ServerEndpointExporter extends ApplicationObjectSupport implements SmartInitializingSingleton, BeanFactoryAware {
 
-
     private AbstractBeanFactory beanFactory;
 
     private final Map<InetSocketAddress, WebsocketServer> addressWebsocketServerMap = new HashMap<>();
-
-    private Map<String,ServerEndpointConfig> endpointConfigMap;
-
-    public ServerEndpointExporter(Map<String,ServerEndpointConfig> endpointConfigMap){
-        this.endpointConfigMap = endpointConfigMap;
-    }
 
     @Override
     public void afterSingletonsInstantiated() {
@@ -64,7 +57,11 @@ public class ServerEndpointExporter extends ApplicationObjectSupport implements 
         }
 
         for (Class<?> endpointClass : endpointClasses) {
-            registerEndpoint(endpointClass);
+            if (ClassUtils.isCglibProxyClass(endpointClass)){
+                registerEndpoint(endpointClass.getSuperclass());
+            }else {
+                registerEndpoint(endpointClass);
+            }
         }
 
         init();
@@ -78,7 +75,9 @@ public class ServerEndpointExporter extends ApplicationObjectSupport implements 
                 PojoEndpointServer pojoEndpointServer = websocketServer.getPojoEndpointServer();
                 StringJoiner stringJoiner = new StringJoiner(",");
                 pojoEndpointServer.getPathMatcherSet().forEach(pathMatcher -> stringJoiner.add("'" + pathMatcher.getPattern() + "'"));
-                logger.info(String.format("\033[34mNetty WebSocket started on port: %s with context path(s): %s .\033[0m", pojoEndpointServer.getPort(), stringJoiner.toString()));
+                logger.info(String.format("\033[34mNetty WebSocket started on" +
+                                "host : %s port: %s with context path(s): %s .\033[0m"
+                        ,pojoEndpointServer.getHost(), pojoEndpointServer.getPort(), stringJoiner.toString()));
             } catch (InterruptedException e) {
                 logger.error(String.format("websocket [%s] init fail", entry.getKey()), e);
             } catch (SSLException e) {
@@ -88,17 +87,12 @@ public class ServerEndpointExporter extends ApplicationObjectSupport implements 
         }
     }
 
-
     private void registerEndpoint(Class<?> endpointClass) {
         ServerEndpoint annotation = AnnotatedElementUtils.findMergedAnnotation(endpointClass, ServerEndpoint.class);
         if (annotation == null) {
             throw new IllegalStateException("missingAnnotation ServerEndpoint");
         }
-        String name = resolveAnnotationValue(annotation.host(), String.class, "name");
-        if(name == null || !endpointConfigMap.containsKey(name)){
-            throw new IllegalStateException("no ServerEndpoint config "+ name);
-        }
-        ServerEndpointConfig serverEndpointConfig = endpointConfigMap.get(name);
+        ServerEndpointConfig serverEndpointConfig = buildConfig(annotation);
 
         ApplicationContext context = getApplicationContext();
         PojoMethodMapping pojoMethodMapping = null;

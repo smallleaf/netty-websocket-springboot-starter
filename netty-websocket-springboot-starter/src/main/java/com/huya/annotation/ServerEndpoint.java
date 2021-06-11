@@ -25,7 +25,7 @@ public @interface ServerEndpoint {
     @AliasFor("value")
     String path() default "/";
 
-    String host() default "0.0.0.0";
+    String host() default "127.0.0.1";
 
     String port() default "80";
 
@@ -63,11 +63,11 @@ public @interface ServerEndpoint {
 
     //------------------------- idleEvent -------------------------
 
-    String readerIdleTimeSeconds() default "0";
+    String readerIdleTimeSeconds() default "10";
 
-    String writerIdleTimeSeconds() default "0";
+    String writerIdleTimeSeconds() default "10";
 
-    String allIdleTimeSeconds() default "0";
+    String allIdleTimeSeconds() default "10";
 
     //------------------------- handshake -------------------------
 

@@ -1,3 +1,5 @@
 .idea/
 websocket-netty-springboot-starter.iml
-netty-websocket-springboot-starter/target/
+*/target/
+*/.idea/
+*/*.iml

@@ -1,0 +1,62 @@
+// 游戏通用协议定义
+syntax = "proto3";
+package pb;
+option java_generic_services = true;
+
+option java_package = "com.huya.game.pb.pb";
+option java_multiple_files = true;
+
+
+enum PacketType {
+    NotUse = 0;
+    HeartbeatPacket = 1;
+    GameDownPacket = 2;     //游戏服下行的包，主要是推送
+}
+// 数据协议，所有接受和发送的数据包都以Packet作为数据协议
+message Packet {
+    PacketType type = 1;         // 包类型，0登录包，1心跳包，2游戏包，3taf包
+    string uri = 2;        // 协议号(taf包)
+    int32 seqId = 3;      // 序列号(taf包)，调用方视情况生成，用于包对应，服务器原值返回
+    bytes body = 4;     // 数据包，proto二进制
+    int32 code = 5;     // 响应码(taf包)
+}
+
+enum ErrorCode{
+    CHECK_ERROR = 0 ;   //权限校验失败
+}
+
+// 数据协议，所有接受和发送的数据包都以Packet作为数据协议
+message GamePacket {
+    int32 uri = 1;        // 协议号
+    bytes body = 2;     // 数据包，proto二进制
+}
+
+// 批量数据
+message GamePackets {
+	// 服务器处理消息从头开始处理，先发送的放前面
+	repeated GamePacket gamePackets = 1;
+}
+
+// 数据协议，SocketCommandManager所有接受和发送的数据包都以SocketPacket作为数据协议
+message SocketPacket {
+    int32 sn = 1;        // 消息序号，递增到最大值可重置,对于客户端发往服务器的消息，客户端自己维护一个递增的消息号，对于服务器发往客户端的推送消息（非回应消息），服务器给每个客户端维护一个递增序号
+    bool notice = 2;        // true表示通知消息，不需要回应，否则，无论如何服务器都会回应一样sn的消息，此时，对于没有S2C的请求消息，回应的消息体为空
+    bool error = 3;        // 对于回应消息，如果存在error，则说明服务器执行指令出错，此时需要将body解码为ErrorMsg而不是对应的S2CXxx，对于请求、推送消息，不需要判断该值
+    int32 uri = 4;        // 协议号
+    bytes body = 5;     // 消息体，proto二进制
+}
+// 批量数据
+message SocketPackets {
+	// 服务器处理消息从头开始处理，先发送的放前面
+	repeated SocketPacket socketPackets = 1;
+}
+// 服务器发生错误时回应的消息结果
+message ErrorMsg {
+	int32 code = 1; //对应每个服务器自定义的错误码
+	string msg = 2; //错误消息
+}
+
+message Heartbeat {
+    int64 timestamp = 1;
+}
+
