@@ -1,5 +1,6 @@
 package com.huya.ext;
 
+import com.huya.annotation.OnMessage;
 import com.huya.annotation.PathVariable;
 import com.huya.annotation.RequestParam;
 import com.huya.pojo.Session;
@@ -23,6 +24,9 @@ public interface Server {
     default void onOpen(Session session, HttpHeaders headers, @RequestParam String req, @RequestParam MultiValueMap reqMap,
                   @PathVariable String arg, @PathVariable Map pathMap){}
 
+    @OnMessage
+    default void onMessage(Session session, String message) {
+    }
     /**
      *Override need @OnClose
      */

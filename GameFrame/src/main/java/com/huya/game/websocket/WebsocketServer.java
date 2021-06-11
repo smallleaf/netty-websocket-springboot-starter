@@ -1,7 +1,9 @@
 package com.huya.game.websocket;
 
-import com.huya.annotation.*;
-import com.huya.ext.Server;
+import com.huya.annotation.OnBinary;
+import com.huya.annotation.OnEvent;
+import com.huya.annotation.OnMessage;
+import com.huya.annotation.ServerEndpoint;
 import com.huya.ext.ServerAdapter;
 import com.huya.game.model.UserInfo;
 import com.huya.game.pb.pb.SocketPacket;
@@ -103,6 +105,11 @@ public class WebsocketServer extends ServerAdapter {
         });
     }
 
+    @OnMessage
+    @Override
+    public void onMessage(Session session, String message) {
+        logger.info("get data {}",message);
+    }
 
     @OnEvent
     @Override
