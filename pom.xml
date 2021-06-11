@@ -7,6 +7,10 @@
     <groupId>com.huya</groupId>
     <artifactId>websocket-netty-springboot-starter</artifactId>
     <version>1.0</version>
+    <modules>
+        <module>netty-websocket-springboot-starter</module>
+    </modules>
+    <packaging>pom</packaging>
 
 
 </project>
