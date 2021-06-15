@@ -7,7 +7,7 @@
     <groupId>com.huya</groupId>
     <artifactId>netty-websocket-springboot-starter</artifactId>
     <version>0.1.0</version>
-
+    <packaging>jar</packaging>
     <name>netty-websocket-springboot-starter</name>
 
     <properties>

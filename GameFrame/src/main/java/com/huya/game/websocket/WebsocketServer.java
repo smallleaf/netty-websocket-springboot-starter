@@ -109,6 +109,7 @@ public class WebsocketServer extends ServerAdapter {
     @Override
     public void onMessage(Session session, String message) {
         logger.info("get data {}",message);
+        session.sendText("get data "+ message);
     }
 
     @OnEvent
