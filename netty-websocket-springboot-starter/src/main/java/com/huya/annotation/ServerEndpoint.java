@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface ServerEndpoint {
 
-    String name() default "default";
+    String name() default "ws";
 
     @AliasFor("path")
     String value() default "/";

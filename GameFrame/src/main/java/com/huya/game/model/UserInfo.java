@@ -10,6 +10,15 @@ public class UserInfo {
 
     private long userId;
     private long roomId;
+    private int gameId;
+
+    public int getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
+    }
 
     public long getRoomId() {
         return roomId;

@@ -1,7 +1,6 @@
 package com.huya.game.service;
 
 import com.huya.game.model.UserInfo;
-import com.huya.game.pb.pb.SocketPacket;
 
 public interface ConnectService {
 
@@ -14,5 +13,5 @@ public interface ConnectService {
 
     void connectSuccess(UserInfo userInfo);
 
-    void onData(UserInfo userInfo, SocketPacket socketPacket);
+    void close(UserInfo userInfo);
 }

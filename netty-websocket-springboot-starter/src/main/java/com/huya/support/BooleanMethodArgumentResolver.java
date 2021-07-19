@@ -14,7 +14,8 @@ import org.springframework.core.MethodParameter;
 public class BooleanMethodArgumentResolver implements MethodArgumentResolver{
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getMethod().isAnnotationPresent(OnClose.class) && Boolean.class.isAssignableFrom(parameter.getParameterType());
+        return parameter.getMethod().isAnnotationPresent(OnClose.class)
+                && (boolean.class.isAssignableFrom(parameter.getParameterType()) || Boolean.class.isAssignableFrom(parameter.getParameterType()));
     }
 
     @Override

@@ -229,4 +229,11 @@ public class Session {
         return channel.close(promise);
     }
 
+    @Override
+    public String toString(){
+        StringBuffer sb = new StringBuffer();
+        sb.append("channel id:").append(channel.id()).append(",address:").append(channel.remoteAddress());
+        return sb.toString();
+    }
+
 }

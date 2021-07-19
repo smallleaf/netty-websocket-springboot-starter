@@ -97,7 +97,8 @@ public class ServerEndpointExporter extends ApplicationObjectSupport implements 
         ServerEndpointConfigProperties serverEndpointConfigProperties =
                 serverConfigProperties.getWebsockets().get(annotation.name());
         if(serverEndpointConfigProperties == null){
-            throw new IllegalStateException(("fail to find the "+ annotation.name() +" properties"));
+            throw new IllegalStateException(("fail to find the spring.netty.websockets."+ annotation.name() +" " +
+                    "properties"));
         }
         return new ServerEndpointConfig(serverEndpointConfigProperties);
     }

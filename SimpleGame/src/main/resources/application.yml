@@ -1,0 +1,6 @@
+spring:
+  netty:
+    websockets:
+      ws:
+       port: 8888
+       allIdleTimeSeconds: 10

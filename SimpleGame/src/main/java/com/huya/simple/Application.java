@@ -1,21 +1,20 @@
-package com.huya.game;
+package com.huya.simple;
 
-import com.huya.annotation.EnableWebSocket;
+import com.huya.game.annotation.EnableGameFrameServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * \* @Author: yesheng
- * \* Date: 2021/6/11 12:06
+ * \* Date: 2021/7/19 16:44
  * \* Description:
  * \
  */
 @SpringBootApplication
-@EnableAsync
-public class App {
+@EnableGameFrameServer
+public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(App.class,args);
+        SpringApplication.run(Application.class,args);
     }
 }

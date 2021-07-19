@@ -1,13 +1,12 @@
-package com.huya.game.service.impl;
+package com.huya.simple.service;
 
 import com.huya.game.model.UserInfo;
-import com.huya.game.pb.pb.SocketPacket;
 import com.huya.game.service.ConnectService;
 import org.springframework.stereotype.Service;
 
 /**
  * \* @Author: yesheng
- * \* Date: 2021/6/11 14:40
+ * \* Date: 2021/7/19 17:19
  * \* Description:
  * \
  */
@@ -24,7 +23,7 @@ public class ConnectServiceImpl implements ConnectService {
     }
 
     @Override
-    public void onData(UserInfo userInfo, SocketPacket socketPacket) {
+    public void close(UserInfo userInfo) {
 
     }
 }

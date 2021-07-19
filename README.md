@@ -28,4 +28,11 @@ UDP发送就发送了，客户端收到了就表现。
 
 
 ### 2021/7/19
-使用yml，properties方式配置websocket启动参数
+1. 使用yml，properties方式配置websocket启动参数
+2. 新增使用GameFrame简单例子，继承GameFrame就能够简单使用这个游戏框架。
+只需要一下几个步骤
+```$xslt
+1.启动@EnableGameFrameServer
+2.实现ConnectService
+3.游戏的具体逻辑使用SocketServer
+```

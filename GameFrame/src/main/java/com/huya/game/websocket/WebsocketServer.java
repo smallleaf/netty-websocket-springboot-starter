@@ -1,14 +1,11 @@
 package com.huya.game.websocket;
 
-import com.huya.annotation.OnBinary;
-import com.huya.annotation.OnEvent;
-import com.huya.annotation.OnMessage;
 import com.huya.annotation.ServerEndpoint;
 import com.huya.ext.ServerAdapter;
 import com.huya.game.model.UserInfo;
-import com.huya.game.pb.pb.SocketPacket;
-import com.huya.game.pb.pb.SocketPackets;
 import com.huya.game.service.ConnectService;
+import com.huya.game.support.Command;
+import com.huya.pb.api.SocketPacket;
 import com.huya.pojo.Session;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
@@ -45,6 +42,8 @@ public class WebsocketServer extends ServerAdapter {
     @Autowired
     private Executor executor;
 
+    @Autowired
+    private Command command;
 
     @Override
     public void doHandShake(Session session, HttpHeaders headers, String req, MultiValueMap reqMap, String arg, Map pathMap) {
@@ -75,7 +74,7 @@ public class WebsocketServer extends ServerAdapter {
     }
 
     @Override
-    public void onError(Session session, Throwable throwable) {
+    public void doError(Session session, Throwable throwable) {
         logger.error("onError",throwable);
         close(session);
     }
@@ -86,8 +85,7 @@ public class WebsocketServer extends ServerAdapter {
      * @param bytes
      */
     @Override
-    @OnBinary
-    public void onBinary(Session session, byte[] bytes) {
+    public void doBinary(Session session, byte[] bytes) {
         executor.execute(()->{
             try {
                 Optional<UserInfo> userInfoOptional = Optional.ofNullable(session.getAttribute(USER_INFO_KEY));
@@ -95,28 +93,25 @@ public class WebsocketServer extends ServerAdapter {
                     close(session);
                     return;
                 }
-                SocketPackets packets = SocketPackets.parseFrom(bytes);
-                for (SocketPacket socketPacket : packets.getSocketPacketsList()) {
-                    connectService.onData(userInfoOptional.get(),socketPacket);
-                }
+                SocketPacket socketPacket = SocketPacket.parseFrom(bytes);
+                command.invoke(socketPacket.getUri(),userInfoOptional.get(),socketPacket.getBody());
             }catch (Exception e){
                 logger.error("onBinary:"+e.getMessage(),e);
             }
         });
     }
 
-    @OnMessage
     @Override
-    public void onMessage(Session session, String message) {
+    public void doMessage(Session session, String message) {
         logger.info("get data {}",message);
         session.sendText("get data "+ message);
     }
 
-    @OnEvent
     @Override
-    public void onEvent(Session session, Object evt) {
+    public void doEvent(Session session, Object evt) {
         if(evt instanceof IdleStateEvent){
-            session.close();
+            logger.info("the client timeout session id {}",session.toString());
+            close(session);
         }
     }
 
@@ -125,6 +120,7 @@ public class WebsocketServer extends ServerAdapter {
         Optional<UserInfo> userInfoOptional = Optional.ofNullable(session.getAttribute(USER_INFO_KEY));
         if(userInfoOptional.isPresent()){
             SessionManager.getInstance().removeSession(userInfoOptional.get().getUserId(),session);
+            connectService.close(userInfoOptional.get());
         }
     }
 }

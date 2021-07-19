@@ -19,6 +19,8 @@
         <module>GameFrame</module>
         <module>websocket-client</module>
         <module>netty-udp-game</module>
+        <module>pb-api</module>
+        <module>SimpleGame</module>
     </modules>
 
     <build>
