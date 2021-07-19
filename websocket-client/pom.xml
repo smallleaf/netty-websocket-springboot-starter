@@ -26,6 +26,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.share1024</groupId>
+            <artifactId>pb-api</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-codec-http</artifactId>
             <version>${netty.version}</version>

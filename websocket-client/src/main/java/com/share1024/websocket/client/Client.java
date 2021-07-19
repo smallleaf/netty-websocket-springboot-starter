@@ -9,10 +9,13 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.websocketx.PingWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * \* @Author: yesheng
@@ -20,7 +23,7 @@ import java.net.URISyntaxException;
  * \* Description:
  * \
  */
-public class Client {
+public class Client implements Runnable{
     private Channel channel;
     private URI uri;
     private Bootstrap bootstrap;
@@ -49,21 +52,38 @@ public class Client {
         try {
             channel = bootstrap.connect(uri.getHost(),uri.getPort()).sync().channel();
             clientHandler.syncHand();
+            start();
         }catch (Exception e){
             throw new RuntimeException(e);
         }
     }
 
+    public boolean isClose(){
+        return channel == null || !channel.isActive();
+    }
+
+    private void start(){
+        GlobalExecutor.getInstance().scheduledExecutorService.schedule(this,2, TimeUnit.SECONDS);
+    }
+
+
     public void sendTextMessage(String text){
         channel.writeAndFlush(new TextWebSocketFrame(text));
     }
 
-
-    public static void main(String[] args) throws InterruptedException {
-        String wsUrl = "ws://127.0.0.1:80?userId=123456";
-        Client client = new Client(wsUrl);
-        client.connect();
-        client.sendTextMessage("测试");
+    public void write(PingWebSocketFrame pingWebSocketFrame){
+        channel.writeAndFlush(pingWebSocketFrame);
     }
-
+    @Override
+    public void run() {
+        try {
+            PingWebSocketFrame pingWebSocketFrame = new PingWebSocketFrame();
+            write(pingWebSocketFrame);
+        }finally {
+            if(isClose()){
+                return;
+            }
+            GlobalExecutor.getInstance().scheduledExecutorService.schedule(this,2, TimeUnit.SECONDS);
+        }
+    }
 }
