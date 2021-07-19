@@ -22,6 +22,7 @@
         <module>pb-api</module>
         <module>SimpleGame</module>
         <module>websocket-test</module>
+        <module>jmeter-test</module>
     </modules>
 
     <build>
