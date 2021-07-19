@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ConnectServiceImpl implements ConnectService {
     @Override
-    public boolean checkConnect(UserInfo userInfo) {
+    public boolean preConnect(UserInfo userInfo) {
         return true;
     }
 

@@ -31,6 +31,12 @@ public class ServerEndpointExporter extends ApplicationObjectSupport implements 
 
     private final Map<InetSocketAddress, WebsocketServer> addressWebsocketServerMap = new HashMap<>();
 
+    private ServerConfigProperties serverConfigProperties;
+
+    public ServerEndpointExporter(ServerConfigProperties serverConfigProperties) {
+        this.serverConfigProperties = serverConfigProperties;
+    }
+
     @Override
     public void afterSingletonsInstantiated() {
         registerEndpoints();
@@ -87,12 +93,21 @@ public class ServerEndpointExporter extends ApplicationObjectSupport implements 
         }
     }
 
+    private ServerEndpointConfig getPropertiesConfig(ServerEndpoint annotation){
+        ServerEndpointConfigProperties serverEndpointConfigProperties =
+                serverConfigProperties.getWebsockets().get(annotation.name());
+        if(serverEndpointConfigProperties == null){
+            throw new IllegalStateException(("fail to find the "+ annotation.name() +" properties"));
+        }
+        return new ServerEndpointConfig(serverEndpointConfigProperties);
+    }
+
     private void registerEndpoint(Class<?> endpointClass) {
         ServerEndpoint annotation = AnnotatedElementUtils.findMergedAnnotation(endpointClass, ServerEndpoint.class);
         if (annotation == null) {
             throw new IllegalStateException("missingAnnotation ServerEndpoint");
         }
-        ServerEndpointConfig serverEndpointConfig = buildConfig(annotation);
+        ServerEndpointConfig serverEndpointConfig = getPropertiesConfig(annotation);
 
         ApplicationContext context = getApplicationContext();
         PojoMethodMapping pojoMethodMapping = null;

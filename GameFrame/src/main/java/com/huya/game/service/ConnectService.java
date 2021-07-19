@@ -5,7 +5,12 @@ import com.huya.game.pb.pb.SocketPacket;
 
 public interface ConnectService {
 
-    boolean checkConnect(UserInfo userInfo);
+    /**
+     * 连接前检查
+     * @param userInfo
+     * @return
+     */
+    boolean preConnect(UserInfo userInfo);
 
     void connectSuccess(UserInfo userInfo);
 

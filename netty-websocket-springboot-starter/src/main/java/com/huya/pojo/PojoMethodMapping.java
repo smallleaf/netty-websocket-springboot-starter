@@ -275,7 +275,7 @@ public class PojoMethodMapping {
         return onClose;
     }
 
-    Object[] getOnCloseArgs(Channel channel) throws Exception {
+    Object[] getOnCloseArgs(Channel channel,boolean isCloseWebSocketFrame) throws Exception {
         return getMethodArgumentValues(channel, null, onCloseParameters, onCloseArgResolvers);
     }
 
@@ -352,6 +352,7 @@ public class PojoMethodMapping {
         resolvers.add(new PathVariableMapMethodArgumentResolver());
         resolvers.add(new PathVariableMethodArgumentResolver(beanFactory));
         resolvers.add(new EventMethodArgumentResolver(beanFactory));
+        resolvers.add(new BooleanMethodArgumentResolver());
         return resolvers;
     }
 

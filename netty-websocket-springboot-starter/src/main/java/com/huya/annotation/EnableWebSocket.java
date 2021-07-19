@@ -1,6 +1,6 @@
 package com.huya.annotation;
 
-import com.huya.standard.NettyWebSocketSelector;
+import com.huya.autoconfigure.NettyWebSocketAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.ElementType;
@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Import(NettyWebSocketSelector.class)
+@Import(NettyWebSocketAutoConfiguration.class)
 public @interface EnableWebSocket {
 }

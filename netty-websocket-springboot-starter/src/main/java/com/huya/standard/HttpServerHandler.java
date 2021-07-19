@@ -112,7 +112,7 @@ class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        pojoEndpointServer.doOnClose(ctx.channel());
+        pojoEndpointServer.doOnClose(ctx.channel(),false);
         super.channelInactive(ctx);
     }
 

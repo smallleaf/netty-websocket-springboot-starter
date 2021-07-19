@@ -26,7 +26,7 @@ class WebSocketServerHandler extends SimpleChannelInboundHandler<WebSocketFrame>
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        pojoEndpointServer.doOnClose(ctx.channel());
+        pojoEndpointServer.doOnClose(ctx.channel(),false);
     }
 
     @Override
@@ -45,6 +45,7 @@ class WebSocketServerHandler extends SimpleChannelInboundHandler<WebSocketFrame>
         }
         if (frame instanceof CloseWebSocketFrame) {
             ctx.writeAndFlush(frame.retainedDuplicate()).addListener(ChannelFutureListener.CLOSE);
+            pojoEndpointServer.doOnClose(ctx.channel(),true);
             return;
         }
         if (frame instanceof BinaryWebSocketFrame) {

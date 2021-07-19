@@ -38,6 +38,7 @@ public class SessionManager {
         }
         synchronized (sessionOptional.get()){
             sessionOptional = Optional.ofNullable(userIdSessionCache.get(uid));
+            //需要判断当前的session是否是移除的
             if(sessionOptional.isPresent() && sessionOptional.get().id().equals(removeSession.id())){
                 userIdSessionCache.remove(uid);
             }

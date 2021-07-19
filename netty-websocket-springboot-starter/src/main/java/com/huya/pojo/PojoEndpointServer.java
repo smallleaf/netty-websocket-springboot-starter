@@ -104,7 +104,7 @@ public class PojoEndpointServer {
         }
     }
 
-    public void doOnClose(Channel channel) {
+    public void doOnClose(Channel channel,boolean isCloseWebSocketFrame) {
         Attribute<String> attrPath = channel.attr(PATH_KEY);
         PojoMethodMapping methodMapping = null;
         if (pathMethodMappingMap.size() == 1) {
@@ -123,7 +123,7 @@ public class PojoEndpointServer {
             Object implement = channel.attr(POJO_KEY).get();
             try {
                 methodMapping.getOnClose().invoke(implement,
-                        methodMapping.getOnCloseArgs(channel));
+                        methodMapping.getOnCloseArgs(channel,isCloseWebSocketFrame));
             } catch (Throwable t) {
                 logger.error(t);
             }

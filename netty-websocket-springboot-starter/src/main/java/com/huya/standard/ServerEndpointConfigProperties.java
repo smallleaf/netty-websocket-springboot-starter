@@ -1,13 +1,9 @@
 package com.huya.standard;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
-
 /**
  *
  */
-@Component
-@ConfigurationProperties(prefix = "spring.websocket")
+
 public class ServerEndpointConfigProperties {
 
     private String path = "/";

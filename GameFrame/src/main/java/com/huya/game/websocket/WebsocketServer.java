@@ -49,7 +49,7 @@ public class WebsocketServer extends ServerAdapter {
     @Override
     public void doHandShake(Session session, HttpHeaders headers, String req, MultiValueMap reqMap, String arg, Map pathMap) {
         UserInfo userInfo = getUserInfo(reqMap);
-        if(!connectService.checkConnect(userInfo)){
+        if(!connectService.preConnect(userInfo)){
             //发送失败
             FullHttpResponse res = new DefaultFullHttpResponse(HTTP_1_1, UNAUTHORIZED,
                     Unpooled.wrappedBuffer(("check connect fail " + userInfo).getBytes()));
@@ -85,8 +85,8 @@ public class WebsocketServer extends ServerAdapter {
      * @param session
      * @param bytes
      */
-    @OnBinary
     @Override
+    @OnBinary
     public void onBinary(Session session, byte[] bytes) {
         executor.execute(()->{
             try {

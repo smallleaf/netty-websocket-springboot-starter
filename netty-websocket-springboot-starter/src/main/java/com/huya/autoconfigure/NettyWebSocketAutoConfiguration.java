@@ -1,6 +1,9 @@
-package com.huya.standard;
+package com.huya.autoconfigure;
 
+import com.huya.standard.ServerConfigProperties;
+import com.huya.standard.ServerEndpointExporter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,11 +17,13 @@ import java.util.Map;
 
 @ConditionalOnMissingBean(ServerEndpointExporter.class)
 @Configuration
-public class NettyWebSocketSelector {
+@EnableConfigurationProperties(ServerConfigProperties.class)
+public class NettyWebSocketAutoConfiguration {
 
     @Bean
-    public ServerEndpointExporter serverEndpointExporter() {
-        return new ServerEndpointExporter();
+    public ServerEndpointExporter serverEndpointExporter(ServerConfigProperties serverConfigProperties) {
+        return new ServerEndpointExporter(serverConfigProperties);
     }
+
 
 }
