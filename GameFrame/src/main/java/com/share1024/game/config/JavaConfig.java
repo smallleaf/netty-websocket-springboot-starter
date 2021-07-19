@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * \
  */
 @Configuration
-@ComponentScan("com.huya.game")
+@ComponentScan("com.share1024.game")
 public class JavaConfig {
 
     @Bean

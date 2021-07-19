@@ -1,7 +1,6 @@
 package com.share1024.ws.pojo;
 
 import com.share1024.ws.standard.ServerEndpointConfig;
-import com.huya.support.*;
 import com.share1024.ws.support.*;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpRequest;

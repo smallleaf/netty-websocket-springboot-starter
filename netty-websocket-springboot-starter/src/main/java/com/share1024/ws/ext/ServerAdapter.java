@@ -1,6 +1,5 @@
 package com.share1024.ws.ext;
 
-import com.huya.annotation.*;
 import com.share1024.ws.annotation.*;
 import com.share1024.ws.pojo.Session;
 import io.netty.handler.codec.http.HttpHeaders;

@@ -45,12 +45,12 @@ public class Client {
                 });
     }
 
-    public void connect(){
+    public void connect() {
         try {
             channel = bootstrap.connect(uri.getHost(),uri.getPort()).sync().channel();
             clientHandler.syncHand();
         }catch (Exception e){
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

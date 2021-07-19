@@ -1,9 +1,7 @@
 package com.share1024.ws.pojo;
 
-import com.huya.annotation.*;
-import com.share1024.ws.exception.DeploymentException;
-import com.huya.support.*;
 import com.share1024.ws.annotation.*;
+import com.share1024.ws.exception.DeploymentException;
 import com.share1024.ws.support.*;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpRequest;

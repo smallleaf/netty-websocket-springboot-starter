@@ -26,7 +26,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.huya</groupId>
+            <groupId>com.share1024</groupId>
             <artifactId>pb-api</artifactId>
             <version>0.1.0</version>
         </dependency>
