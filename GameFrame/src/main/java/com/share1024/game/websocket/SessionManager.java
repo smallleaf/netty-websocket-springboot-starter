@@ -19,10 +19,14 @@ public class SessionManager {
         return INSTANCE;
     }
 
-    public Map<Long, Session> userIdSessionCache = new ConcurrentHashMap<>();
+    private Map<Long, Session> userIdSessionCache = new ConcurrentHashMap<>();
 
     public void addSession(long uid,Session session){
         userIdSessionCache.put(uid,session);
+    }
+
+    public Optional<Session> getSessionByUserId(long userId){
+        return Optional.ofNullable(userIdSessionCache.get(userId));
     }
 
     /**

@@ -56,11 +56,11 @@ public class SocketServerBeanPostProcessor implements InstantiationAwareBeanPost
     }
 
     private boolean isUserInfo(Class<?> parameterType){
-        return parameterType.isAssignableFrom(UserInfo.class);
+        return UserInfo.class.isAssignableFrom(parameterType);
     }
 
     private boolean isPbMessage(Class<?> parameterType){
-        return parameterType.isAssignableFrom(AbstractMessage.class);
+        return AbstractMessage.class.isAssignableFrom(parameterType);
     }
 
 

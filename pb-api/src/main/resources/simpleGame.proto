@@ -1,0 +1,20 @@
+// 游戏通用协议定义
+syntax = "proto3";
+package pb;
+option java_generic_services = true;
+
+option java_package = "com.share1024.pb.simplegame";
+option java_multiple_files = true;
+
+
+enum RequestUri{
+    test = 0;
+}
+
+message TestReq{
+    int32 id = 1;   //id
+}
+
+message TestRsp{
+    int32 id = 1;
+}

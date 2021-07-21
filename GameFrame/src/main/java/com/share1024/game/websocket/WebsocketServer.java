@@ -64,6 +64,7 @@ public class WebsocketServer extends ServerAdapter {
         session.setAttribute(USER_INFO_KEY,userInfo);
         SessionManager.getInstance().addSession(userInfo.getUserId(),session);
         connectService.connectSuccess(userInfo);
+        logger.info("the client connect success.{}",session.channel().toString());
     }
 
 
